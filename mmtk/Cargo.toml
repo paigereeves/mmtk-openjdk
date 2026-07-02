@@ -12,6 +12,7 @@ name = "mmtk_openjdk"
 crate-type = ["cdylib"]
 
 [profile.release]
+debug = true
 lto = true
 
 # Metadata for the OpenJDK repository
