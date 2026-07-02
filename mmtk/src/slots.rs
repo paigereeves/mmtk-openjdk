@@ -205,6 +205,10 @@ impl<const COMPRESSED: bool> Slot for OpenJDKSlot<COMPRESSED> {
             unsafe { self.addr.store(object) }
         }
     }
+
+    fn prefetch_load(&self) {
+        self.addr.prefetch();
+    }
 }
 
 /// A range of OpenJDKSlot, usually used for arrays.
