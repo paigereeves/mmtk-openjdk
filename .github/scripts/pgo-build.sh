@@ -49,8 +49,11 @@ RUSTFLAGS="-Cprofile-generate=$PROFILE_DATA_DIR" make CONF=$OPENJDK_CONFIG THIRD
 # Remove extraneous profiling data
 rm -rf $PROFILE_DATA_DIR/*
 
-# Profile using fop
-MMTK_PLAN=GenImmix MMTK_STRESS_FACTOR=16777216 MMTK_PRECISE_STRESS=false ./build/$OPENJDK_CONFIG/images/jdk/bin/java -XX:MetaspaceSize=500M -XX:+DisableExplicitGC -XX:-TieredCompilation -Xcomp -XX:+UseThirdPartyHeap -Xms60M -Xmx60M -jar $DACAPO_JAR -n 5 fop
+# Compile GCBench
+./build/$OPENJDK_CONFIG/images/jdk/bin/javac $PWD/benchmarks/GCBench.java
+
+# Profile using gcbench
+MMTK_PLAN=Immix MMTK_STRESS_FACTOR=16777216 MMTK_PRECISE_STRESS=false ./build/$OPENJDK_CONFIG/images/jdk/bin/java -XX:MetaspaceSize=500M -XX:+DisableExplicitGC -XX:-TieredCompilation -Xcomp -XX:+UseThirdPartyHeap -Xms60M -Xmx60M -cp $PWD/benchmarks GCBench
 
 # Merge profiling data
 "$LLVM_PROFDATA" merge -o $PROFILE_DATA_DIR/merged.profdata $PROFILE_DATA_DIR
