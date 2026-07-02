@@ -45,6 +45,7 @@ built = { version = "0.7.7", features = ["git2"] }
 
 [features]
 default = []
+single_worker = ["mmtk/single_worker"]
 mmtk_extreme_assertions = ["mmtk/extreme_assertions"]
 nogc_lock_free = ["mmtk/nogc_lock_free"]
 nogc_no_zeroing = ["mmtk/nogc_no_zeroing"]
