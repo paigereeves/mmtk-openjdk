@@ -43,7 +43,7 @@ clean_binding_mmtk() {
 clean_binding_mmtk
 
 # Compile with profiling support
-sh configure --disable-warnings-as-errors --with-debug-level=$OPENJDK_DEBUG_LEVEL
+sh configure --disable-warnings-as-errors --with-debug-level=$OPENJDK_DEBUG_LEVEL --with-native-debug-symbols=none
 RUSTFLAGS="-Cprofile-generate=$PROFILE_DATA_DIR" make CONF=$OPENJDK_CONFIG THIRD_PARTY_HEAP=$BINDING_OPENJDK_DIR images
 
 # Remove extraneous profiling data
@@ -53,7 +53,7 @@ rm -rf $PROFILE_DATA_DIR/*
 ./build/$OPENJDK_CONFIG/images/jdk/bin/javac $PWD/benchmarks/GCBench.java
 
 # Profile using gcbench
-MMTK_PLAN=Immix MMTK_STRESS_FACTOR=16777216 MMTK_PRECISE_STRESS=false ./build/$OPENJDK_CONFIG/images/jdk/bin/java -XX:MetaspaceSize=500M -XX:+DisableExplicitGC -XX:-TieredCompilation -Xcomp -XX:+UseThirdPartyHeap -Xms60M -Xmx60M -cp $PWD/benchmarks GCBench
+MMTK_PLAN=$1 MMTK_STRESS_FACTOR=16777216 MMTK_PRECISE_STRESS=false ./build/$OPENJDK_CONFIG/images/jdk/bin/java -XX:MetaspaceSize=500M -XX:+DisableExplicitGC -XX:+UseThirdPartyHeap -Xms60M -Xmx60M -cp $PWD/benchmarks GCBench
 
 # Merge profiling data
 "$LLVM_PROFDATA" merge -o $PROFILE_DATA_DIR/merged.profdata $PROFILE_DATA_DIR

@@ -128,4 +128,17 @@ ifeq ($(MMTK_VO_BIT), 1)
   JVM_CFLAGS += -DMMTK_ENABLE_VO_BIT
 endif
 
-$(BUILD_LIBJVM): $(LIB_MMTK)
+# BUILD_LIBJVM is not defined yet at this point (it's set as a side effect of
+# the SetupJdkLibrary call in CompileJvm.gmk, which is included after this
+# file), so "$(BUILD_LIBJVM): $(LIB_MMTK)" expands to an empty target and is
+# silently dropped by make (prerequisite lists are expanded immediately when
+# a rule is parsed, and .SECONDEXPANSION doesn't defer this far either --
+# it re-expands at the same parse time, before CompileJvm.gmk has run).
+# Without this dependency, the libjvm link races the cargo build/copy of
+# libmmtk_openjdk.so, and loses often enough to fail intermittently,
+# especially after a "cargo clean" forces a full (slow) rebuild.
+#
+# Instead of referencing BUILD_LIBJVM, reconstruct the exact same path
+# SetupJdkLibrary will use, from variables already defined at this point
+# (JVM_LIB_OUTPUTDIR from HotspotCommon.gmk, SHARED_LIBRARY from spec.gmk).
+$(JVM_LIB_OUTPUTDIR)/$(call SHARED_LIBRARY,jvm): $(LIB_MMTK)

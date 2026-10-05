@@ -30,6 +30,8 @@ cfg_if::cfg_if! {
         /// 1 bit per object
         pub(crate) const MARKING_METADATA_SPEC: VMLocalMarkBitSpec =
             VMLocalMarkBitSpec::in_header(FORWARDING_BITS_OFFSET);
+        pub(crate) const AUX_MARKING_METADATA_SPEC: VMLocalAuxMarkBitSpec =
+            VMLocalAuxMarkBitSpec::in_header(MARKING_METADATA_SPEC.as_spec());
 
         #[allow(unused)]
         const LAST_SIDE_SPEC_AFTER_MARK: &MetadataSpec = LOS_METADATA_SPEC.as_spec();
@@ -38,9 +40,11 @@ cfg_if::cfg_if! {
         /// 1 bit per object
         pub(crate) const MARKING_METADATA_SPEC: VMLocalMarkBitSpec =
             VMLocalMarkBitSpec::side_after(LOS_METADATA_SPEC.as_spec());
+        pub(crate) const AUX_MARKING_METADATA_SPEC: VMLocalAuxMarkBitSpec =
+            VMLocalAuxMarkBitSpec::side_after(MARKING_METADATA_SPEC.as_spec());
 
         #[allow(unused)]
-        const LAST_SIDE_SPEC_AFTER_MARK: &MetadataSpec = MARKING_METADATA_SPEC.as_spec();
+        const LAST_SIDE_SPEC_AFTER_MARK: &MetadataSpec = AUX_MARKING_METADATA_SPEC.as_spec();
     }
 }
 

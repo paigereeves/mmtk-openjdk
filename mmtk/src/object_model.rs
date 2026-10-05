@@ -16,6 +16,7 @@ impl<const COMPRESSED: bool> ObjectModel<OpenJDK<COMPRESSED>> for VMObjectModel<
     const LOCAL_FORWARDING_BITS_SPEC: VMLocalForwardingBitsSpec =
         vm_metadata::FORWARDING_BITS_METADATA_SPEC;
     const LOCAL_MARK_BIT_SPEC: VMLocalMarkBitSpec = vm_metadata::MARKING_METADATA_SPEC;
+    const LOCAL_AUX_MARK_BIT_SPEC: VMLocalAuxMarkBitSpec = vm_metadata::AUX_MARKING_METADATA_SPEC;
     const LOCAL_LOS_MARK_NURSERY_SPEC: VMLocalLOSMarkNurserySpec = vm_metadata::LOS_METADATA_SPEC;
 
     const UNIFIED_OBJECT_REFERENCE_ADDRESS: bool = true;
